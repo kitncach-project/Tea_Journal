@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tea Tasting Journal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(45deg, #2d5a27, #4a7c59);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            color: #2d5a27;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #4a7c59;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        input, select, textarea {
+            padding: 0.8rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #4a7c59;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+        }
+
+        .flavor-section {
+            grid-column: 1 / -1;
+            margin-top: 1rem;
+        }
+
+        .flavor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .flavor-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .flavor-item label {
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .flavor-slider {
+            width: 80px;
+            margin-left: 1rem;
+        }
+
+        .flavor-value {
+            min-width: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: #4a7c59;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 0.2rem;
+        }
+
+        .star {
+            font-size: 1.5rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star.active, .star:hover {
+            color: #ffc107;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #4a7c59, #2d5a27);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(74, 124, 89, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            margin-left: 1rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            background: white;
+            border-radius: 15px;
+            padding: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .entries-list {
+            grid-column: 1 / -1;
+            margin-top: 2rem;
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .entry-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #4a7c59;
+            transition: all 0.3s ease;
+        }
+
+        .entry-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .entry-name {
+            font-weight: bold;
+            color: #2d5a27;
+            font-size: 1.1rem;
+        }
+
+        .entry-rating {
+            color: #ffc107;
+        }
+
+        .entry-details {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            color: #aaa;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flavor-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍃 Tea Tasting Journal</h1>
+            <p>Discover, taste, and remember your perfect cup</p>
+        </div>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2 class="section-title">Tea Details</h2>
+                <form id="teaForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="varietal">Varietal/Name</label>
+                            <input type="text" id="varietal" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="merchant">Tea Merchant</label>
+                            <input type="text" id="merchant">
+                        </div>
+                        <div class="form-group">
+                            <label for="sampled">Sampled Date</label>
+                            <input type="date" id="sampled">
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Price ($)</label>
+                            <input type="number" id="price" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="tea_type">Tea Type</label>
+                            <select id="tea_type">
+                                <option value="">Select Type</option>
+                                <option value="Green">Green</option>
+                                <option value="Black">Black</option>
+                                <option value="Oolong">Oolong</option>
+                                <option value="White">White</option>
+                                <option value="Pu-erh">Pu-erh</option>
+                                <option value="Herbal">Herbal</option>
+                                <option value="Rooibos">Rooibos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Rating</label>
+                            <div class="star-rating" id="rating">
+                                <span class="star" data-rating="1">★</span>
+                                <span class="star" data-rating="2">★</span>
+                                <span class="star" data-rating="3">★</span>
+                                <span class="star" data-rating="4">★</span>
+                                <span class="star" data-rating="5">★</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tea_weight">Tea Weight (g)</label>
+                            <input type="number" id="tea_weight" step="0.1" min="0" value="3.0">
+                        </div>
+                        <div class="form-group">
+                            <label for="water_volume">Water Volume (ml)</label>
+                            <input type="number" id="water_volume" min="0" value="250">
+                        </div>
+                        <div class="form-group">
+                            <label for="water_temp">Water Temp (°F)</label>
+                            <input type="number" id="water_temp" min="0" value="190">
+                        </div>
+                        <div class="form-group">
+                            <label for="brew_time">Brew Time (seconds)</label>
+                            <input type="number" id="brew_time" min="0" value="30">
+                        </div>
+                        <div class="form-group">
+                            <label for="steep_no">Steep Number</label>
+                            <input type="number" id="steep_no" min="1" value="1">
+                        </div>
+                    </div>
+
+                    <div class="flavor-section">
+                        <h3 class="section-title">Flavor Profile (0-7 scale)</h3>
+                        <div class="flavor-grid" id="flavorGrid">
+                            <!-- Flavor sliders will be generated here -->
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <button type="submit" class="btn">Save Tea Entry</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset Form</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">Flavor Wheel Preview</h2>
+                <div class="chart-container">
+                    <canvas id="flavorChart"></canvas>
+                </div>
+            </div>
+
+            <div class="entries-list">
+                <h2 class="section-title">Tea Entries</h2>
+                <div id="entriesList">
+                    <p style="text-align: center; color: #666; margin: 2rem 0;">No entries yet. Add your first tea tasting!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for viewing tea details -->
+    <div id="teaModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const flavorLabels = [
+            "Aroma", "Berry Fruit", "Citrus Fruit", "Tropical Fruit", "Stone Fruit",
+            "Floral", "Herbal/Grassy", "Spicy", "Sweet", "Malty",
+            "Vegetal", "Savory", "Earthy", "Chocolaty", "Smoky/Roasty",
+            "Woody", "Tannic", "Body", "Balance", "Linger/Finish"
+        ];
+
+        let teaEntries = [];
+        let currentRating = 3;
+        let flavorChart;
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeForm();
+            loadEntries();
+            setupEventListeners();
+            initializeFlavorChart();
+        });
+
+        function initializeForm() {
+            // Set current date
+            document.getElementById('sampled').value = new Date().toISOString().split('T')[0];
+            
+            // Generate flavor sliders
+            const flavorGrid = document.getElementById('flavorGrid');
+            flavorLabels.forEach(label => {
+                const flavorItem = document.createElement('div');
+                flavorItem.className = 'flavor-item';
+                flavorItem.innerHTML = `
+                    <label>${label}</label>
+                    <input type="range" class="flavor-slider" id="flavor_${label.replace(/[^a-zA-Z0-9]/g, '_')}" 
+                           min="0" max="7" value="0" data-label="${label}">
+                    <span class="flavor-value">0</span>
+                `;
+                flavorGrid.appendChild(flavorItem);
+            });
+
+            // Update star rating display
+            updateStarRating(currentRating);
+        }
+
+        function setupEventListeners() {
+            // Star rating
+            document.querySelectorAll('.star').forEach(star => {
+                star.addEventListener('click', function() {
+                    currentRating = parseInt(this.dataset.rating);
+                    updateStarRating(currentRating);
+                });
+            });
+
+            // Flavor sliders
+            document.querySelectorAll('.flavor-slider').forEach(slider => {
+                slider.addEventListener('input', function() {
+                    const valueSpan = this.parentNode.querySelector('.flavor-value');
+                    valueSpan.textContent = this.value;
+                    updateFlavorChart();
+                });
+            });
+
+            // Form submission
+            document.getElementById('teaForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveTea();
+            });
+
+            // Modal
+            document.querySelector('.close').addEventListener('click', function() {
+                document.getElementById('teaModal').style.display = 'none';
+            });
+
+            window.addEventListener('click', function(e) {
+                const modal = document.getElementById('teaModal');
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        function updateStarRating(rating) {
+            document.querySelectorAll('.star').forEach((star, index) => {
+                star.classList.toggle('active', index < rating);
+            });
+        }
+
+        function initializeFlavorChart() {
+            const ctx = document.getElementById('flavorChart').getContext('2d');
+            const data = flavorLabels.map(() => 0);
+            
+            flavorChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: flavorLabels,
+                    datasets: [{
+                        label: 'Flavor Profile',
+                        data: data,
+                        backgroundColor: 'rgba(74, 124, 89, 0.2)',
+                        borderColor: 'rgba(74, 124, 89, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(74, 124, 89, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(74, 124, 89, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 7,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateFlavorChart() {
+            const data = flavorLabels.map(label => {
+                const slider = document.getElementById(`flavor_${label.replace(/[^a-zA-Z0-9]/g, '_')}`);
+                return parseInt(slider.value);
+            });
+            
+            flavorChart.data.datasets[0].data = data;
+            flavorChart.update();
+        }
+
+        function saveTea() {
+            const formData = new FormData(document.getElementById('teaForm'));
+            const entry = {
+                id: Date.now(),
+                varietal: document.getElementById('varietal').value,
+                merchant: document.getElementById('merchant').value,
+                sampled: document.getElementById('sampled').value,
+                price: parseFloat(document.getElementById('price').value) || 0,
+                rating: currentRating,
+                tea_type: document.getElementById('tea_type').value,
+                tea_weight: parseFloat(document.getElementById('tea_weight').value) || 0,
+                water_volume: parseInt(document.getElementById('water_volume').value) || 0,
+                water_temp: parseInt(document.getElementById('water_temp').value) || 0,
+                brew_time: parseInt(document.getElementById('brew_time').value) || 0,
+                steep_no: parseInt(document.getElementById('steep_no').value) || 1
+            };
+
+            // Add flavor values
+            flavorLabels.forEach(label => {
+                const slider = document.getElementById(`flavor_${label.replace(/[^a-zA-Z0-9]/g, '_')}`);
+                entry[label] = parseInt(slider.value);
+            });
+
+            // Check for duplicates
+            const duplicate = teaEntries.find(tea => 
+                tea.varietal.toLowerCase() === entry.varietal.toLowerCase() && 
+                tea.sampled === entry.sampled
+            );
+
+            if (duplicate) {
+                showAlert('Duplicate entry found for this tea and date!', 'warning');
+                return;
+            }
+
+            // Handle name variations
+            const existingName = teaEntries.find(tea => 
+                tea.varietal.toLowerCase() === entry.varietal.toLowerCase()
+            );
+
+            if (existingName) {
+                const count = teaEntries.filter(tea => 
+                    tea.varietal.toLowerCase().startsWith(entry.varietal.toLowerCase())
+                ).length;
+                entry.varietal = `${entry.varietal} (${count + 1})`;
+            }
+
+            teaEntries.push(entry);
+            saveEntries();
+            displayEntries();
+            showAlert('Tea entry saved successfully!', 'success');
+            resetForm();
+        }
+
+        function resetForm() {
+            document.getElementById('teaForm').reset();
+            document.getElementById('sampled').value = new Date().toISOString().split('T')[0];
+            currentRating = 3;
+            updateStarRating(currentRating);
+            
+            // Reset flavor sliders
+            document.querySelectorAll('.flavor-slider').forEach(slider => {
+                slider.value = 0;
+                slider.parentNode.querySelector('.flavor-value').textContent = '0';
+            });
+            
+            updateFlavorChart();
+        }
+
+        function displayEntries() {
+            const entriesList = document.getElementById('entriesList');
+            
+            if (teaEntries.length === 0) {
+                entriesList.innerHTML = '<p style="text-align: center; color: #666; margin: 2rem 0;">No entries yet. Add your first tea tasting!</p>';
+                return;
+            }
+
+            const entriesHTML = teaEntries.map(entry => `
+                <div class="entry-card" onclick="viewTea(${entry.id})">
+                    <div class="entry-header">
+                        <div class="entry-name">${entry.varietal}</div>
+                        <div class="entry-rating">${'★'.repeat(entry.rating)}</div>
+                    </div>
+                    <div class="entry-details">
+                        ${entry.tea_type} • ${entry.merchant} • ${entry.sampled}
+                        ${entry.price > 0 ? ` • $${entry.price.toFixed(2)}` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            entriesList.innerHTML = entriesHTML;
+        }
+
+        function viewTea(id) {
+            const entry = teaEntries.find(tea => tea.id === id);
+            if (!entry) return;
+
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <h2>${entry.varietal}</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                    <p><strong>Sampled:</strong> ${entry.sampled}</p>
+                    <p><strong>Merchant:</strong> ${entry.merchant}</p>
+                    <p><strong>Type:</strong> ${entry.tea_type}</p>
+                    <p><strong>Price:</strong> $${entry.price.toFixed(2)}</p>
+                    <p><strong>Rating:</strong> ${'★'.repeat(entry.rating)}</p>
+                    <p><strong>Weight:</strong> ${entry.tea_weight}g</p>
+                    <p><strong>Water:</strong> ${entry.water_volume}ml at ${entry.water_temp}°F</p>
+                    <p><strong>Brew Time:</strong> ${entry.brew_time}s</p>
+                    <p><strong>Steep #:</strong> ${entry.steep_no}</p>
+                </div>
+                <h3>Flavor Profile</h3>
+                <div style="height: 400px; margin: 1rem 0;">
+                    <canvas id="modalChart"></canvas>
+                </div>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                    <tr style="background: #f8f9fa;"><th style="padding: 0.5rem; border: 1px solid #ddd;">Flavor</th><th style="padding: 0.5rem; border: 1px solid #ddd;">Score</th></tr>
+                    ${flavorLabels.map(label => `
+                        <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">${label}</td><td style="padding: 0.5rem; border: 1px solid #ddd;">${entry[label]}</td></tr>
+                    `).join('')}
+                </table>
+            `;
+
+            // Create chart for modal
+            setTimeout(() => {
+                const ctx = document.getElementById('modalChart').getContext('2d');
+                const data = flavorLabels.map(label => entry[label]);
+                
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: flavorLabels,
+                        datasets: [{
+                            label: 'Flavor Profile',
+                            data: data,
+                            backgroundColor: 'rgba(74, 124, 89, 0.2)',
+                            borderColor: 'rgba(74, 124, 89, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(74, 124, 89, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(74, 124, 89, 1)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 7,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }, 100);
+
+            document.getElementById('teaModal').style.display = 'block';
+        }
+
+        function showAlert(message, type) {
+            const existingAlert = document.querySelector('.alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(alert, container.firstChild.nextSibling);
+
+            setTimeout(() => {
+                alert.remove();
+            }, 4000);
+        }
+
+        function saveEntries() {
+            // In a real app, this would save to a database
+            // For now, we'll store in memory only
+            console.log('Entries saved:', teaEntries);
+        }
+
+        function loadEntries() {
+            // In a real app, this would load from a database
+            // For now, entries are stored in memory only
+            displayEntries();
+        }
+    </script>
+</body>
+</html>
