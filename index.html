@@ -13,18 +13,20 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
+            font-size: 16px;
+            line-height: 1.5;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             overflow: hidden;
             backdrop-filter: blur(10px);
         }
@@ -32,74 +34,103 @@
         .header {
             background: linear-gradient(45deg, #2d5a27, #4a7c59);
             color: white;
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
         }
 
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             margin-bottom: 0.5rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .header p {
             opacity: 0.9;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            padding: 2rem;
+        .nav-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border: none;
+            background: none;
+            font-size: 0.9rem;
+        }
+
+        .nav-tab.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 1rem;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .form-section {
             background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .section-title {
             color: #2d5a27;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
             border-bottom: 2px solid #4a7c59;
         }
 
-        .form-grid {
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
+            margin-bottom: 1rem;
         }
 
         label {
             font-weight: 600;
             color: #333;
             margin-bottom: 0.3rem;
+            display: block;
             font-size: 0.9rem;
         }
 
         input, select, textarea {
-            padding: 0.8rem;
+            width: 100%;
+            padding: 0.75rem;
             border: 2px solid #e1e1e1;
             border-radius: 8px;
             font-size: 1rem;
             transition: all 0.3s ease;
             background: #fafafa;
+            -webkit-appearance: none;
+            appearance: none;
         }
 
         input:focus, select:focus, textarea:focus {
@@ -109,15 +140,10 @@
             box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
         }
 
-        .flavor-section {
-            grid-column: 1 / -1;
-            margin-top: 1rem;
-        }
-
         .flavor-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
             margin-top: 1rem;
         }
 
@@ -126,7 +152,7 @@
             justify-content: space-between;
             align-items: center;
             background: #f8f9fa;
-            padding: 0.8rem;
+            padding: 0.75rem;
             border-radius: 8px;
             border: 1px solid #e9ecef;
         }
@@ -134,11 +160,13 @@
         .flavor-item label {
             margin: 0;
             flex-grow: 1;
+            font-size: 0.9rem;
         }
 
         .flavor-slider {
             width: 80px;
-            margin-left: 1rem;
+            margin: 0 0.5rem;
+            flex-shrink: 0;
         }
 
         .flavor-value {
@@ -146,18 +174,22 @@
             text-align: center;
             font-weight: bold;
             color: #4a7c59;
+            font-size: 0.9rem;
         }
 
         .star-rating {
             display: flex;
+            justify-content: center;
             gap: 0.2rem;
+            margin: 0.5rem 0;
         }
 
         .star {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: #ddd;
             cursor: pointer;
             transition: color 0.2s ease;
+            touch-action: manipulation;
         }
 
         .star.active, .star:hover {
@@ -168,19 +200,20 @@
             background: linear-gradient(45deg, #4a7c59, #2d5a27);
             color: white;
             border: none;
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            width: 100%;
+            margin-bottom: 0.5rem;
+            touch-action: manipulation;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(74, 124, 89, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(74, 124, 89, 0.3);
         }
 
         .btn:active {
@@ -189,39 +222,41 @@
 
         .btn-secondary {
             background: linear-gradient(45deg, #6c757d, #495057);
-            margin-left: 1rem;
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #28a745, #1e7e34);
+        }
+
+        .csv-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .chart-container {
             position: relative;
-            height: 400px;
+            height: 300px;
             background: white;
-            border-radius: 15px;
+            border-radius: 10px;
             padding: 1rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .entries-list {
-            grid-column: 1 / -1;
-            margin-top: 2rem;
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
         }
 
         .entry-card {
             background: #f8f9fa;
-            border-radius: 10px;
+            border-radius: 8px;
             padding: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             border-left: 4px solid #4a7c59;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .entry-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .entry-card:active {
+            transform: scale(0.98);
+            background: #e9ecef;
         }
 
         .entry-header {
@@ -234,16 +269,17 @@
         .entry-name {
             font-weight: bold;
             color: #2d5a27;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .entry-rating {
             color: #ffc107;
+            font-size: 0.9rem;
         }
 
         .entry-details {
             color: #666;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         .modal {
@@ -261,11 +297,11 @@
         .modal-content {
             background-color: white;
             margin: 5% auto;
-            padding: 2rem;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 80vh;
+            padding: 1.5rem;
+            border-radius: 10px;
+            width: 95%;
+            max-width: 600px;
+            max-height: 90vh;
             overflow-y: auto;
             position: relative;
         }
@@ -275,10 +311,11 @@
             right: 1rem;
             top: 1rem;
             color: #aaa;
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
             cursor: pointer;
             transition: color 0.3s ease;
+            touch-action: manipulation;
         }
 
         .close:hover {
@@ -304,22 +341,94 @@
             border: 1px solid #ffeaa7;
         }
 
+        .flavor-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .flavor-table th,
+        .flavor-table td {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .flavor-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .hidden-input {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+        }
+
+        /* Mobile-specific improvements */
         @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: 1rem;
+            body {
+                padding: 5px;
+                font-size: 16px; /* Prevent zoom on iOS */
             }
 
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .flavor-grid {
-                grid-template-columns: 1fr;
+            .header {
+                padding: 1rem;
             }
 
             .header h1 {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
+            }
+
+            .nav-tab {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.8rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .csv-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+
+            .star {
+                font-size: 1.5rem;
+            }
+
+            .modal-content {
+                margin: 2% auto;
+                width: 98%;
+                max-height: 95vh;
+                padding: 1rem;
+            }
+
+            .flavor-table {
+                font-size: 0.8rem;
+            }
+
+            .flavor-table th,
+            .flavor-table td {
+                padding: 0.3rem;
+            }
+        }
+
+        /* Touch improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .btn:hover {
+                transform: none;
+                box-shadow: none;
+            }
+
+            .entry-card:hover {
+                transform: none;
             }
         }
     </style>
@@ -329,29 +438,36 @@
         <div class="header">
             <h1>🍃 Tea Tasting Journal</h1>
             <p>Discover, taste, and remember your perfect cup</p>
+            
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('add-tea')">Add Tea</button>
+                <button class="nav-tab" onclick="switchTab('view-entries')">My Teas</button>
+                <button class="nav-tab" onclick="switchTab('data-management')">Data</button>
+            </div>
         </div>
 
-        <div class="main-content">
+        <!-- Add Tea Tab -->
+        <div id="add-tea" class="tab-content active">
             <div class="form-section">
                 <h2 class="section-title">Tea Details</h2>
                 <form id="teaForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="varietal">Varietal/Name</label>
-                            <input type="text" id="varietal" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="varietal">Tea Name/Varietal *</label>
+                        <input type="text" id="varietal" required>
+                    </div>
+                    
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="merchant">Tea Merchant</label>
                             <input type="text" id="merchant">
                         </div>
                         <div class="form-group">
-                            <label for="sampled">Sampled Date</label>
+                            <label for="sampled">Date Sampled</label>
                             <input type="date" id="sampled">
                         </div>
-                        <div class="form-group">
-                            <label for="price">Price ($)</label>
-                            <input type="number" id="price" step="0.01" min="0">
-                        </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="tea_type">Tea Type</label>
                             <select id="tea_type">
@@ -366,15 +482,24 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Rating</label>
-                            <div class="star-rating" id="rating">
-                                <span class="star" data-rating="1">★</span>
-                                <span class="star" data-rating="2">★</span>
-                                <span class="star" data-rating="3">★</span>
-                                <span class="star" data-rating="4">★</span>
-                                <span class="star" data-rating="5">★</span>
-                            </div>
+                            <label for="price">Price ($)</label>
+                            <input type="number" id="price" step="0.01" min="0">
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Overall Rating</label>
+                        <div class="star-rating" id="rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+
+                    <h3 class="section-title">Brewing Parameters</h3>
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="tea_weight">Tea Weight (g)</label>
                             <input type="number" id="tea_weight" step="0.1" min="0" value="3.0">
@@ -383,28 +508,30 @@
                             <label for="water_volume">Water Volume (ml)</label>
                             <input type="number" id="water_volume" min="0" value="250">
                         </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="water_temp">Water Temp (°F)</label>
                             <input type="number" id="water_temp" min="0" value="190">
                         </div>
                         <div class="form-group">
-                            <label for="brew_time">Brew Time (seconds)</label>
+                            <label for="brew_time">Brew Time (sec)</label>
                             <input type="number" id="brew_time" min="0" value="30">
                         </div>
-                        <div class="form-group">
-                            <label for="steep_no">Steep Number</label>
-                            <input type="number" id="steep_no" min="1" value="1">
-                        </div>
                     </div>
 
-                    <div class="flavor-section">
-                        <h3 class="section-title">Flavor Profile (0-7 scale)</h3>
-                        <div class="flavor-grid" id="flavorGrid">
-                            <!-- Flavor sliders will be generated here -->
-                        </div>
+                    <div class="form-group">
+                        <label for="steep_no">Steep Number</label>
+                        <input type="number" id="steep_no" min="1" value="1">
                     </div>
 
-                    <div style="margin-top: 2rem; text-align: center;">
+                    <h3 class="section-title">Flavor Profile (0-7 scale)</h3>
+                    <div class="flavor-grid" id="flavorGrid">
+                        <!-- Flavor sliders will be generated here -->
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
                         <button type="submit" class="btn">Save Tea Entry</button>
                         <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset Form</button>
                     </div>
@@ -412,16 +539,44 @@
             </div>
 
             <div class="form-section">
-                <h2 class="section-title">Flavor Wheel Preview</h2>
+                <h2 class="section-title">Flavor Preview</h2>
                 <div class="chart-container">
                     <canvas id="flavorChart"></canvas>
                 </div>
             </div>
+        </div>
 
-            <div class="entries-list">
-                <h2 class="section-title">Tea Entries</h2>
+        <!-- View Entries Tab -->
+        <div id="view-entries" class="tab-content">
+            <div class="form-section">
+                <h2 class="section-title">My Tea Collection</h2>
                 <div id="entriesList">
                     <p style="text-align: center; color: #666; margin: 2rem 0;">No entries yet. Add your first tea tasting!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Management Tab -->
+        <div id="data-management" class="tab-content">
+            <div class="form-section">
+                <h2 class="section-title">Export & Import Data</h2>
+                
+                <div class="csv-controls">
+                    <button class="btn btn-success" onclick="exportToCSV()">📥 Export to CSV</button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('csvFileInput').click()">📤 Import CSV</button>
+                </div>
+                
+                <input type="file" id="csvFileInput" class="hidden-input" accept=".csv" onchange="importFromCSV(event)">
+                
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">
+                    Export your tea data as a CSV file for backup or analysis. Import previously exported CSV files to restore your data.
+                </p>
+
+                <h3 class="section-title">Data Summary</h3>
+                <div id="dataSummary">
+                    <p><strong>Total Entries:</strong> <span id="totalEntries">0</span></p>
+                    <p><strong>Favorite Tea Type:</strong> <span id="favoriteType">-</span></p>
+                    <p><strong>Average Rating:</strong> <span id="averageRating">-</span></p>
                 </div>
             </div>
         </div>
@@ -453,7 +608,31 @@
             loadEntries();
             setupEventListeners();
             initializeFlavorChart();
+            updateDataSummary();
         });
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Update data if viewing entries or data management
+            if (tabName === 'view-entries') {
+                displayEntries();
+            } else if (tabName === 'data-management') {
+                updateDataSummary();
+            }
+        }
 
         function initializeForm() {
             // Set current date
@@ -548,7 +727,15 @@
                             beginAtZero: true,
                             max: 7,
                             ticks: {
-                                stepSize: 1
+                                stepSize: 1,
+                                font: {
+                                    size: 10
+                                }
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 9
+                                }
                             }
                         }
                     },
@@ -572,7 +759,6 @@
         }
 
         function saveTea() {
-            const formData = new FormData(document.getElementById('teaForm'));
             const entry = {
                 id: Date.now(),
                 varietal: document.getElementById('varietal').value,
@@ -605,23 +791,10 @@
                 return;
             }
 
-            // Handle name variations
-            const existingName = teaEntries.find(tea => 
-                tea.varietal.toLowerCase() === entry.varietal.toLowerCase()
-            );
-
-            if (existingName) {
-                const count = teaEntries.filter(tea => 
-                    tea.varietal.toLowerCase().startsWith(entry.varietal.toLowerCase())
-                ).length;
-                entry.varietal = `${entry.varietal} (${count + 1})`;
-            }
-
             teaEntries.push(entry);
-            saveEntries();
-            displayEntries();
             showAlert('Tea entry saved successfully!', 'success');
             resetForm();
+            updateDataSummary();
         }
 
         function resetForm() {
@@ -647,7 +820,8 @@
                 return;
             }
 
-            const entriesHTML = teaEntries.map(entry => `
+            const sortedEntries = [...teaEntries].sort((a, b) => new Date(b.sampled) - new Date(a.sampled));
+            const entriesHTML = sortedEntries.map(entry => `
                 <div class="entry-card" onclick="viewTea(${entry.id})">
                     <div class="entry-header">
                         <div class="entry-name">${entry.varietal}</div>
@@ -670,25 +844,26 @@
             const modalContent = document.getElementById('modalContent');
             modalContent.innerHTML = `
                 <h2>${entry.varietal}</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 1rem 0; font-size: 0.9rem;">
                     <p><strong>Sampled:</strong> ${entry.sampled}</p>
                     <p><strong>Merchant:</strong> ${entry.merchant}</p>
                     <p><strong>Type:</strong> ${entry.tea_type}</p>
                     <p><strong>Price:</strong> $${entry.price.toFixed(2)}</p>
                     <p><strong>Rating:</strong> ${'★'.repeat(entry.rating)}</p>
                     <p><strong>Weight:</strong> ${entry.tea_weight}g</p>
-                    <p><strong>Water:</strong> ${entry.water_volume}ml at ${entry.water_temp}°F</p>
+                    <p><strong>Water:</strong> ${entry.water_volume}ml</p>
+                    <p><strong>Temp:</strong> ${entry.water_temp}°F</p>
                     <p><strong>Brew Time:</strong> ${entry.brew_time}s</p>
                     <p><strong>Steep #:</strong> ${entry.steep_no}</p>
                 </div>
                 <h3>Flavor Profile</h3>
-                <div style="height: 400px; margin: 1rem 0;">
+                <div style="height: 250px; margin: 1rem 0;">
                     <canvas id="modalChart"></canvas>
                 </div>
-                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
-                    <tr style="background: #f8f9fa;"><th style="padding: 0.5rem; border: 1px solid #ddd;">Flavor</th><th style="padding: 0.5rem; border: 1px solid #ddd;">Score</th></tr>
-                    ${flavorLabels.map(label => `
-                        <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">${label}</td><td style="padding: 0.5rem; border: 1px solid #ddd;">${entry[label]}</td></tr>
+                <table class="flavor-table">
+                    <tr><th>Flavor</th><th>Score</th></tr>
+                    ${flavorLabels.filter(label => entry[label] > 0).map(label => `
+                        <tr><td>${label}</td><td>${entry[label]}</td></tr>
                     `).join('')}
                 </table>
             `;
@@ -700,73 +875,3 @@
                 
                 new Chart(ctx, {
                     type: 'radar',
-                    data: {
-                        labels: flavorLabels,
-                        datasets: [{
-                            label: 'Flavor Profile',
-                            data: data,
-                            backgroundColor: 'rgba(74, 124, 89, 0.2)',
-                            borderColor: 'rgba(74, 124, 89, 1)',
-                            borderWidth: 2,
-                            pointBackgroundColor: 'rgba(74, 124, 89, 1)',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: 'rgba(74, 124, 89, 1)'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            r: {
-                                beginAtZero: true,
-                                max: 7,
-                                ticks: {
-                                    stepSize: 1
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        }
-                    }
-                });
-            }, 100);
-
-            document.getElementById('teaModal').style.display = 'block';
-        }
-
-        function showAlert(message, type) {
-            const existingAlert = document.querySelector('.alert');
-            if (existingAlert) {
-                existingAlert.remove();
-            }
-
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
-            alert.textContent = message;
-            
-            const container = document.querySelector('.container');
-            container.insertBefore(alert, container.firstChild.nextSibling);
-
-            setTimeout(() => {
-                alert.remove();
-            }, 4000);
-        }
-
-        function saveEntries() {
-            // In a real app, this would save to a database
-            // For now, we'll store in memory only
-            console.log('Entries saved:', teaEntries);
-        }
-
-        function loadEntries() {
-            // In a real app, this would load from a database
-            // For now, entries are stored in memory only
-            displayEntries();
-        }
-    </script>
-</body>
-</html>
