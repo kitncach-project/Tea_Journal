@@ -3,9 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tea Tasting Journal</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <title>AV Service Report - Problem Tracker</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #161616;
+            --bg-tertiary: #262626;
+            --bg-hover: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1a1;
+            --text-muted: #6b7280;
+            --accent: #3b82f6;
+            --accent-dark: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --border: #404040;
+            --border-light: #525252;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,422 +33,487 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
             min-height: 100vh;
-            padding: 10px;
-            font-size: 16px;
-            line-height: 1.5;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
+            padding: 2rem;
         }
 
         .header {
-            background: linear-gradient(45deg, #2d5a27, #4a7c59);
-            color: white;
-            padding: 1.5rem;
             text-align: center;
+            margin-bottom: 3rem;
         }
 
         .header h1 {
-            font-size: 2rem;
+            font-size: 2.5rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .header p {
-            opacity: 0.9;
-            font-size: 1rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 400;
         }
 
-        .nav-tabs {
-            display: flex;
-            background: rgba(255, 255, 255, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        .form-container {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
         }
 
-        .nav-tab {
-            flex: 1;
-            padding: 1rem;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.8);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            border: none;
-            background: none;
-            font-size: 0.9rem;
-        }
-
-        .nav-tab.active {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        .nav-tab:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .tab-content {
-            display: none;
-            padding: 1rem;
-        }
-
-        .tab-content.active {
-            display: block;
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 0;
         }
 
         .form-section {
-            background: white;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            border-right: 1px solid var(--border);
+        }
+
+        .form-section:last-child {
+            border-right: none;
         }
 
         .section-title {
-            color: #2d5a27;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #4a7c59;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: "";
+            width: 4px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+            border-right: none;
+            border-top: 1px solid var(--border);
         }
 
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        label {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 0.3rem;
+        .form-group label {
             display: block;
-            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--error);
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e1e1e1;
+            padding: 0.875rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
             border-radius: 8px;
+            color: var(--text-primary);
             font-size: 1rem;
-            transition: all 0.3s ease;
-            background: #fafafa;
-            -webkit-appearance: none;
-            appearance: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #4a7c59;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: var(--bg-secondary);
         }
 
-        .flavor-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.5rem;
-            margin-top: 1rem;
+        input::placeholder, textarea::placeholder {
+            color: var(--text-muted);
         }
 
-        .flavor-item {
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Quick Add Section */
+        .quick-add {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .quick-add h3 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            background: #f8f9fa;
-            padding: 0.75rem;
-            border-radius: 8px;
-            border: 1px solid #e9ecef;
+            gap: 0.5rem;
         }
 
-        .flavor-item label {
-            margin: 0;
-            flex-grow: 1;
-            font-size: 0.9rem;
+        .quick-add h3::before {
+            content: "⚡";
+            font-size: 1.2rem;
         }
 
-        .flavor-slider {
-            width: 80px;
-            margin: 0 0.5rem;
-            flex-shrink: 0;
+        .quick-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+            margin-bottom: 1rem;
         }
 
-        .flavor-value {
-            min-width: 20px;
-            text-align: center;
-            font-weight: bold;
-            color: #4a7c59;
-            font-size: 0.9rem;
-        }
-
-        .star-rating {
-            display: flex;
-            justify-content: center;
-            gap: 0.2rem;
-            margin: 0.5rem 0;
-        }
-
-        .star {
-            font-size: 1.8rem;
-            color: #ddd;
-            cursor: pointer;
-            transition: color 0.2s ease;
-            touch-action: manipulation;
-        }
-
-        .star.active, .star:hover {
-            color: #ffc107;
-        }
-
-        .btn {
-            background: linear-gradient(45deg, #4a7c59, #2d5a27);
+        .add-btn {
+            padding: 0.875rem 1.5rem;
+            background: var(--success);
             color: white;
             border: none;
-            padding: 1rem 1.5rem;
             border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-bottom: 0.5rem;
-            touch-action: manipulation;
+            transition: all 0.2s ease;
+            white-space: nowrap;
         }
 
-        .btn:hover {
+        .add-btn:hover {
+            background: #059669;
             transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(74, 124, 89, 0.3);
         }
 
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(45deg, #6c757d, #495057);
-        }
-
-        .btn-success {
-            background: linear-gradient(45deg, #28a745, #1e7e34);
-        }
-
-        .csv-controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-            background: white;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .entry-card {
-            background: #f8f9fa;
+        .priority-select {
+            padding: 0.875rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-left: 4px solid #4a7c59;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            color: var(--text-primary);
+            font-size: 1rem;
         }
 
-        .entry-card:active {
-            transform: scale(0.98);
-            background: #e9ecef;
+        /* Problems List */
+        .problems-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
         }
 
-        .entry-header {
+        .problems-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.5rem;
         }
 
-        .entry-name {
-            font-weight: bold;
-            color: #2d5a27;
-            font-size: 1rem;
+        .problems-header h3 {
+            color: var(--text-primary);
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .entry-rating {
-            color: #ffc107;
-            font-size: 0.9rem;
+        .problems-header h3::before {
+            content: "📋";
+            font-size: 1.2rem;
         }
 
-        .entry-details {
-            color: #666;
-            font-size: 0.8rem;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 1.5rem;
-            border-radius: 10px;
-            width: 95%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .close {
-            position: absolute;
-            right: 1rem;
-            top: 1rem;
-            color: #aaa;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s ease;
-            touch-action: manipulation;
-        }
-
-        .close:hover {
-            color: #333;
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
+        .problem-counter {
+            background: var(--accent);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
             font-weight: 500;
         }
 
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .problems-list {
+            max-height: 500px;
+            overflow-y: auto;
         }
 
-        .alert-warning {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
+        .problem-item {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s ease;
         }
 
-        .flavor-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            font-size: 0.9rem;
+        .problem-item:hover {
+            background: var(--bg-hover);
         }
 
-        .flavor-table th,
-        .flavor-table td {
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            text-align: left;
+        .problem-item:last-child {
+            border-bottom: none;
         }
 
-        .flavor-table th {
-            background: #f8f9fa;
+        .problem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-priority {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
             font-weight: 600;
+            text-transform: uppercase;
         }
 
-        .hidden-input {
-            position: absolute;
-            left: -9999px;
-            opacity: 0;
+        .priority-low { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .priority-medium { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .priority-high { background: rgba(239, 68, 68, 0.2); color: var(--error); }
+        .priority-critical { background: rgba(239, 68, 68, 0.4); color: #fee; }
+
+        .problem-actions {
+            display: flex;
+            gap: 0.5rem;
         }
 
-        /* Mobile-specific improvements */
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .edit-btn {
+            background: var(--accent);
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: var(--accent-dark);
+        }
+
+        .delete-btn {
+            background: var(--error);
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+
+        .problem-description {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .timestamp {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .equipment-tag {
+            background: var(--bg-tertiary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .btn {
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 140px;
+            justify-content: center;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-light);
+        }
+
+        .status-toast {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .status-toast.show {
+            transform: translateX(0);
+        }
+
+        .status-toast.success {
+            background: var(--success);
+        }
+
+        .status-toast.error {
+            background: var(--error);
+        }
+
+        /* Modal for editing */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .close-btn:hover {
+            color: var(--text-primary);
+        }
+
         @media (max-width: 768px) {
-            body {
-                padding: 5px;
-                font-size: 16px; /* Prevent zoom on iOS */
-            }
-
-            .header {
+            .container {
                 padding: 1rem;
             }
-
-            .header h1 {
-                font-size: 1.5rem;
-            }
-
-            .nav-tab {
-                padding: 0.75rem 0.5rem;
-                font-size: 0.8rem;
-            }
-
-            .form-row {
+            
+            .form-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .form-section {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .quick-form {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .problem-header {
+                flex-direction: column;
+                align-items: flex-start;
                 gap: 0.5rem;
             }
-
-            .csv-controls {
-                grid-template-columns: 1fr;
+            
+            .problem-actions {
+                align-self: flex-end;
             }
-
-            .chart-container {
-                height: 250px;
-            }
-
-            .star {
-                font-size: 1.5rem;
-            }
-
-            .modal-content {
-                margin: 2% auto;
-                width: 98%;
-                max-height: 95vh;
-                padding: 1rem;
-            }
-
-            .flavor-table {
-                font-size: 0.8rem;
-            }
-
-            .flavor-table th,
-            .flavor-table td {
-                padding: 0.3rem;
-            }
-        }
-
-        /* Touch improvements */
-        @media (hover: none) and (pointer: coarse) {
-            .btn:hover {
-                transform: none;
-                box-shadow: none;
-            }
-
-            .entry-card:hover {
-                transform: none;
+            
+            .button-group {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
@@ -436,442 +521,486 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🍃 Tea Tasting Journal</h1>
-            <p>Discover, taste, and remember your perfect cup</p>
-            
-            <div class="nav-tabs">
-                <button class="nav-tab active" onclick="switchTab('add-tea')">Add Tea</button>
-                <button class="nav-tab" onclick="switchTab('view-entries')">My Teas</button>
-                <button class="nav-tab" onclick="switchTab('data-management')">Data</button>
+            <h1>AV Service Report</h1>
+            <p>Add problems as you find them</p>
+        </div>
+
+        <!-- Service Info Form -->
+        <div class="form-container">
+            <form id="serviceInfoForm">
+                <div class="form-grid">
+                    <div class="form-section">
+                        <h3 class="section-title">Service Details</h3>
+                        <div class="form-group">
+                            <label for="techName" class="required">Technician</label>
+                            <input type="text" id="techName" name="techName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="serviceDate" class="required">Date</label>
+                            <input type="date" id="serviceDate" name="serviceDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ticketNumber">Ticket #</label>
+                            <input type="text" id="ticketNumber" name="ticketNumber" placeholder="Work order reference">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">Location</h3>
+                        <div class="form-group">
+                            <label for="facility" class="required">Facility</label>
+                            <input type="text" id="facility" name="facility" required placeholder="Building name">
+                        </div>
+                        <div class="form-group">
+                            <label for="roomNumber" class="required">Room</label>
+                            <input type="text" id="roomNumber" name="roomNumber" required placeholder="Room number">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPerson">Contact</label>
+                            <input type="text" id="contactPerson" name="contactPerson" placeholder="Primary contact">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Quick Add Problem -->
+        <div class="quick-add">
+            <h3>Add Problem</h3>
+            <div class="quick-form">
+                <div class="form-group">
+                    <label for="quickProblem">Problem Description</label>
+                    <textarea id="quickProblem" placeholder="Describe the issue..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="quickEquipment">Equipment</label>
+                    <select id="quickEquipment">
+                        <option value="">Select...</option>
+                        <option value="Projector">Projector</option>
+                        <option value="Display/Monitor">Display/Monitor</option>
+                        <option value="Audio System">Audio System</option>
+                        <option value="Microphones">Microphones</option>
+                        <option value="Camera">Camera</option>
+                        <option value="Control System">Control System</option>
+                        <option value="Network">Network</option>
+                        <option value="Lighting">Lighting</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="quickPriority">Priority</label>
+                    <select id="quickPriority" class="priority-select">
+                        <option value="Low">Low</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="High">High</option>
+                        <option value="Critical">Critical</option>
+                    </select>
+                </div>
+                <button type="button" class="add-btn" id="addProblemBtn">+ Add</button>
             </div>
         </div>
 
-        <!-- Add Tea Tab -->
-        <div id="add-tea" class="tab-content active">
-            <div class="form-section">
-                <h2 class="section-title">Tea Details</h2>
-                <form id="teaForm">
-                    <div class="form-group">
-                        <label for="varietal">Tea Name/Varietal *</label>
-                        <input type="text" id="varietal" required>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="merchant">Tea Merchant</label>
-                            <input type="text" id="merchant">
-                        </div>
-                        <div class="form-group">
-                            <label for="sampled">Date Sampled</label>
-                            <input type="date" id="sampled">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="tea_type">Tea Type</label>
-                            <select id="tea_type">
-                                <option value="">Select Type</option>
-                                <option value="Green">Green</option>
-                                <option value="Black">Black</option>
-                                <option value="Oolong">Oolong</option>
-                                <option value="White">White</option>
-                                <option value="Pu-erh">Pu-erh</option>
-                                <option value="Herbal">Herbal</option>
-                                <option value="Rooibos">Rooibos</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="price">Price ($)</label>
-                            <input type="number" id="price" step="0.01" min="0">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Overall Rating</label>
-                        <div class="star-rating" id="rating">
-                            <span class="star" data-rating="1">★</span>
-                            <span class="star" data-rating="2">★</span>
-                            <span class="star" data-rating="3">★</span>
-                            <span class="star" data-rating="4">★</span>
-                            <span class="star" data-rating="5">★</span>
-                        </div>
-                    </div>
-
-                    <h3 class="section-title">Brewing Parameters</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="tea_weight">Tea Weight (g)</label>
-                            <input type="number" id="tea_weight" step="0.1" min="0" value="3.0">
-                        </div>
-                        <div class="form-group">
-                            <label for="water_volume">Water Volume (ml)</label>
-                            <input type="number" id="water_volume" min="0" value="250">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="water_temp">Water Temp (°F)</label>
-                            <input type="number" id="water_temp" min="0" value="190">
-                        </div>
-                        <div class="form-group">
-                            <label for="brew_time">Brew Time (sec)</label>
-                            <input type="number" id="brew_time" min="0" value="30">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="steep_no">Steep Number</label>
-                        <input type="number" id="steep_no" min="1" value="1">
-                    </div>
-
-                    <h3 class="section-title">Flavor Profile (0-7 scale)</h3>
-                    <div class="flavor-grid" id="flavorGrid">
-                        <!-- Flavor sliders will be generated here -->
-                    </div>
-
-                    <div style="margin-top: 1.5rem;">
-                        <button type="submit" class="btn">Save Tea Entry</button>
-                        <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset Form</button>
-                    </div>
-                </form>
+        <!-- Problems List -->
+        <div class="problems-section">
+            <div class="problems-header">
+                <h3>Problems Found</h3>
+                <div class="problem-counter" id="problemCounter">0 items</div>
             </div>
-
-            <div class="form-section">
-                <h2 class="section-title">Flavor Preview</h2>
-                <div class="chart-container">
-                    <canvas id="flavorChart"></canvas>
+            <div class="problems-list" id="problemsList">
+                <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                    No problems added yet. Use the quick add form above to start documenting issues.
                 </div>
             </div>
         </div>
 
-        <!-- View Entries Tab -->
-        <div id="view-entries" class="tab-content">
-            <div class="form-section">
-                <h2 class="section-title">My Tea Collection</h2>
-                <div id="entriesList">
-                    <p style="text-align: center; color: #666; margin: 2rem 0;">No entries yet. Add your first tea tasting!</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Data Management Tab -->
-        <div id="data-management" class="tab-content">
-            <div class="form-section">
-                <h2 class="section-title">Export & Import Data</h2>
-                
-                <div class="csv-controls">
-                    <button class="btn btn-success" onclick="exportToCSV()">📥 Export to CSV</button>
-                    <button class="btn btn-secondary" onclick="document.getElementById('csvFileInput').click()">📤 Import CSV</button>
-                </div>
-                
-                <input type="file" id="csvFileInput" class="hidden-input" accept=".csv" onchange="importFromCSV(event)">
-                
-                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">
-                    Export your tea data as a CSV file for backup or analysis. Import previously exported CSV files to restore your data.
-                </p>
-
-                <h3 class="section-title">Data Summary</h3>
-                <div id="dataSummary">
-                    <p><strong>Total Entries:</strong> <span id="totalEntries">0</span></p>
-                    <p><strong>Favorite Tea Type:</strong> <span id="favoriteType">-</span></p>
-                    <p><strong>Average Rating:</strong> <span id="averageRating">-</span></p>
-                </div>
-            </div>
+        <!-- Action Buttons -->
+        <div class="button-group">
+            <button type="button" class="btn btn-secondary" id="clearAllBtn">
+                Clear All
+            </button>
+            <button type="button" class="btn btn-primary" id="exportReportBtn">
+                📄 Export Report
+            </button>
         </div>
     </div>
 
-    <!-- Modal for viewing tea details -->
-    <div id="teaModal" class="modal">
+    <!-- Edit Problem Modal -->
+    <div class="modal" id="editModal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modalContent"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Problem</h3>
+                <button type="button" class="close-btn" id="closeModalBtn">×</button>
+            </div>
+            <form id="editProblemForm">
+                <div class="form-group">
+                    <label for="editDescription" class="required">Description</label>
+                    <textarea id="editDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editEquipment">Equipment</label>
+                    <select id="editEquipment">
+                        <option value="">Select...</option>
+                        <option value="Projector">Projector</option>
+                        <option value="Display/Monitor">Display/Monitor</option>
+                        <option value="Audio System">Audio System</option>
+                        <option value="Microphones">Microphones</option>
+                        <option value="Camera">Camera</option>
+                        <option value="Control System">Control System</option>
+                        <option value="Network">Network</option>
+                        <option value="Lighting">Lighting</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editPriority">Priority</label>
+                    <select id="editPriority">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Critical">Critical</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editResolution">Resolution</label>
+                    <textarea id="editResolution" placeholder="How was this resolved?"></textarea>
+                </div>
+                <div class="button-group">
+                    <button type="button" class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
         </div>
     </div>
+
+    <div class="status-toast" id="statusToast"></div>
 
     <script>
-        const flavorLabels = [
-            "Aroma", "Berry Fruit", "Citrus Fruit", "Tropical Fruit", "Stone Fruit",
-            "Floral", "Herbal/Grassy", "Spicy", "Sweet", "Malty",
-            "Vegetal", "Savory", "Earthy", "Chocolaty", "Smoky/Roasty",
-            "Woody", "Tannic", "Body", "Balance", "Linger/Finish"
-        ];
+        let problems = [];
+        let editingIndex = -1;
 
-        let teaEntries = [];
-        let currentRating = 3;
-        let flavorChart;
-
-        // Initialize the app
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeForm();
-            loadEntries();
-            setupEventListeners();
-            initializeFlavorChart();
-            updateDataSummary();
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setDefaultDate();
+            initializeEventListeners();
         });
 
-        function switchTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
+        function setDefaultDate() {
+            document.getElementById('serviceDate').valueAsDate = new Date();
+        }
+
+        function initializeEventListeners() {
+            document.getElementById('addProblemBtn').addEventListener('click', addProblem);
+            document.getElementById('clearAllBtn').addEventListener('click', clearAll);
+            document.getElementById('exportReportBtn').addEventListener('click', exportReport);
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            document.getElementById('cancelEditBtn').addEventListener('click', closeModal);
+            document.getElementById('editProblemForm').addEventListener('submit', saveProblemEdit);
+
+            // Quick add with Enter key
+            document.getElementById('quickProblem').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    addProblem();
+                }
             });
-            
-            // Remove active class from all nav tabs
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-            
-            // Update data if viewing entries or data management
-            if (tabName === 'view-entries') {
-                displayEntries();
-            } else if (tabName === 'data-management') {
-                updateDataSummary();
+        }
+
+        function addProblem() {
+            const description = document.getElementById('quickProblem').value.trim();
+            const equipment = document.getElementById('quickEquipment').value;
+            const priority = document.getElementById('quickPriority').value;
+
+            if (!description) {
+                showToast('Please enter a problem description', 'error');
+                return;
             }
-        }
 
-        function initializeForm() {
-            // Set current date
-            document.getElementById('sampled').value = new Date().toISOString().split('T')[0];
-            
-            // Generate flavor sliders
-            const flavorGrid = document.getElementById('flavorGrid');
-            flavorLabels.forEach(label => {
-                const flavorItem = document.createElement('div');
-                flavorItem.className = 'flavor-item';
-                flavorItem.innerHTML = `
-                    <label>${label}</label>
-                    <input type="range" class="flavor-slider" id="flavor_${label.replace(/[^a-zA-Z0-9]/g, '_')}" 
-                           min="0" max="7" value="0" data-label="${label}">
-                    <span class="flavor-value">0</span>
-                `;
-                flavorGrid.appendChild(flavorItem);
-            });
-
-            // Update star rating display
-            updateStarRating(currentRating);
-        }
-
-        function setupEventListeners() {
-            // Star rating
-            document.querySelectorAll('.star').forEach(star => {
-                star.addEventListener('click', function() {
-                    currentRating = parseInt(this.dataset.rating);
-                    updateStarRating(currentRating);
-                });
-            });
-
-            // Flavor sliders
-            document.querySelectorAll('.flavor-slider').forEach(slider => {
-                slider.addEventListener('input', function() {
-                    const valueSpan = this.parentNode.querySelector('.flavor-value');
-                    valueSpan.textContent = this.value;
-                    updateFlavorChart();
-                });
-            });
-
-            // Form submission
-            document.getElementById('teaForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                saveTea();
-            });
-
-            // Modal
-            document.querySelector('.close').addEventListener('click', function() {
-                document.getElementById('teaModal').style.display = 'none';
-            });
-
-            window.addEventListener('click', function(e) {
-                const modal = document.getElementById('teaModal');
-                if (e.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-        }
-
-        function updateStarRating(rating) {
-            document.querySelectorAll('.star').forEach((star, index) => {
-                star.classList.toggle('active', index < rating);
-            });
-        }
-
-        function initializeFlavorChart() {
-            const ctx = document.getElementById('flavorChart').getContext('2d');
-            const data = flavorLabels.map(() => 0);
-            
-            flavorChart = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: flavorLabels,
-                    datasets: [{
-                        label: 'Flavor Profile',
-                        data: data,
-                        backgroundColor: 'rgba(74, 124, 89, 0.2)',
-                        borderColor: 'rgba(74, 124, 89, 1)',
-                        borderWidth: 2,
-                        pointBackgroundColor: 'rgba(74, 124, 89, 1)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(74, 124, 89, 1)'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            beginAtZero: true,
-                            max: 7,
-                            ticks: {
-                                stepSize: 1,
-                                font: {
-                                    size: 10
-                                }
-                            },
-                            pointLabels: {
-                                font: {
-                                    size: 9
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
-            });
-        }
-
-        function updateFlavorChart() {
-            const data = flavorLabels.map(label => {
-                const slider = document.getElementById(`flavor_${label.replace(/[^a-zA-Z0-9]/g, '_')}`);
-                return parseInt(slider.value);
-            });
-            
-            flavorChart.data.datasets[0].data = data;
-            flavorChart.update();
-        }
-
-        function saveTea() {
-            const entry = {
+            const problem = {
                 id: Date.now(),
-                varietal: document.getElementById('varietal').value,
-                merchant: document.getElementById('merchant').value,
-                sampled: document.getElementById('sampled').value,
-                price: parseFloat(document.getElementById('price').value) || 0,
-                rating: currentRating,
-                tea_type: document.getElementById('tea_type').value,
-                tea_weight: parseFloat(document.getElementById('tea_weight').value) || 0,
-                water_volume: parseInt(document.getElementById('water_volume').value) || 0,
-                water_temp: parseInt(document.getElementById('water_temp').value) || 0,
-                brew_time: parseInt(document.getElementById('brew_time').value) || 0,
-                steep_no: parseInt(document.getElementById('steep_no').value) || 1
+                description,
+                equipment,
+                priority,
+                resolution: '',
+                timestamp: new Date().toLocaleString()
             };
 
-            // Add flavor values
-            flavorLabels.forEach(label => {
-                const slider = document.getElementById(`flavor_${label.replace(/[^a-zA-Z0-9]/g, '_')}`);
-                entry[label] = parseInt(slider.value);
-            });
-
-            // Check for duplicates
-            const duplicate = teaEntries.find(tea => 
-                tea.varietal.toLowerCase() === entry.varietal.toLowerCase() && 
-                tea.sampled === entry.sampled
-            );
-
-            if (duplicate) {
-                showAlert('Duplicate entry found for this tea and date!', 'warning');
-                return;
-            }
-
-            teaEntries.push(entry);
-            showAlert('Tea entry saved successfully!', 'success');
-            resetForm();
-            updateDataSummary();
+            problems.push(problem);
+            renderProblems();
+            clearQuickForm();
+            showToast('Problem added successfully', 'success');
         }
 
-        function resetForm() {
-            document.getElementById('teaForm').reset();
-            document.getElementById('sampled').value = new Date().toISOString().split('T')[0];
-            currentRating = 3;
-            updateStarRating(currentRating);
-            
-            // Reset flavor sliders
-            document.querySelectorAll('.flavor-slider').forEach(slider => {
-                slider.value = 0;
-                slider.parentNode.querySelector('.flavor-value').textContent = '0';
-            });
-            
-            updateFlavorChart();
+        function clearQuickForm() {
+            document.getElementById('quickProblem').value = '';
+            document.getElementById('quickEquipment').value = '';
+            document.getElementById('quickPriority').value = 'Medium';
+            document.getElementById('quickProblem').focus();
         }
 
-        function displayEntries() {
-            const entriesList = document.getElementById('entriesList');
-            
-            if (teaEntries.length === 0) {
-                entriesList.innerHTML = '<p style="text-align: center; color: #666; margin: 2rem 0;">No entries yet. Add your first tea tasting!</p>';
-                return;
-            }
+        function renderProblems() {
+            const list = document.getElementById('problemsList');
+            const counter = document.getElementById('problemCounter');
 
-            const sortedEntries = [...teaEntries].sort((a, b) => new Date(b.sampled) - new Date(a.sampled));
-            const entriesHTML = sortedEntries.map(entry => `
-                <div class="entry-card" onclick="viewTea(${entry.id})">
-                    <div class="entry-header">
-                        <div class="entry-name">${entry.varietal}</div>
-                        <div class="entry-rating">${'★'.repeat(entry.rating)}</div>
+            counter.textContent = `${problems.length} item${problems.length !== 1 ? 's' : ''}`;
+
+            if (problems.length === 0) {
+                list.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        No problems added yet. Use the quick add form above to start documenting issues.
                     </div>
-                    <div class="entry-details">
-                        ${entry.tea_type} • ${entry.merchant} • ${entry.sampled}
-                        ${entry.price > 0 ? ` • $${entry.price.toFixed(2)}` : ''}
+                `;
+                return;
+            }
+
+            list.innerHTML = problems.map((problem, index) => `
+                <div class="problem-item">
+                    <div class="problem-header">
+                        <div class="problem-priority priority-${problem.priority.toLowerCase()}">${problem.priority}</div>
+                        <div class="problem-actions">
+                            <button class="icon-btn edit-btn" onclick="editProblem(${index})" title="Edit">✏</button>
+                            <button class="icon-btn delete-btn" onclick="deleteProblem(${index})" title="Delete">🗑</button>
+                        </div>
+                    </div>
+                    <div class="problem-description">${problem.description}</div>
+                    ${problem.resolution ? `<div class="problem-description" style="color: var(--success); margin-top: 0.5rem;">✅ ${problem.resolution}</div>` : ''}
+                    <div class="problem-meta">
+                        <div class="timestamp">🕒 ${problem.timestamp}</div>
+                        ${problem.equipment ? `<div class="equipment-tag">${problem.equipment}</div>` : ''}
                     </div>
                 </div>
             `).join('');
-
-            entriesList.innerHTML = entriesHTML;
         }
 
-        function viewTea(id) {
-            const entry = teaEntries.find(tea => tea.id === id);
-            if (!entry) return;
+        function editProblem(index) {
+            editingIndex = index;
+            const problem = problems[index];
 
-            const modalContent = document.getElementById('modalContent');
-            modalContent.innerHTML = `
-                <h2>${entry.varietal}</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 1rem 0; font-size: 0.9rem;">
-                    <p><strong>Sampled:</strong> ${entry.sampled}</p>
-                    <p><strong>Merchant:</strong> ${entry.merchant}</p>
-                    <p><strong>Type:</strong> ${entry.tea_type}</p>
-                    <p><strong>Price:</strong> $${entry.price.toFixed(2)}</p>
-                    <p><strong>Rating:</strong> ${'★'.repeat(entry.rating)}</p>
-                    <p><strong>Weight:</strong> ${entry.tea_weight}g</p>
-                    <p><strong>Water:</strong> ${entry.water_volume}ml</p>
-                    <p><strong>Temp:</strong> ${entry.water_temp}°F</p>
-                    <p><strong>Brew Time:</strong> ${entry.brew_time}s</p>
-                    <p><strong>Steep #:</strong> ${entry.steep_no}</p>
-                </div>
-                <h3>Flavor Profile</h3>
-                <div style="height: 250px; margin: 1rem 0;">
-                    <canvas id="modalChart"></canvas>
-                </div>
-                <table class="flavor-table">
-                    <tr><th>Flavor</th><th>Score</th></tr>
-                    ${flavorLabels.filter(label => entry[label] > 0).map(label => `
-                        <tr><td>${label}</td><td>${entry[label]}</td></tr>
-                    `).join('')}
-                </table>
-            `;
+            document.getElementById('editDescription').value = problem.description;
+            document.getElementById('editEquipment').value = problem.equipment;
+            document.getElementById('editPriority').value = problem.priority;
+            document.getElementById('editResolution').value = problem.resolution;
 
-            // Create chart for modal
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function deleteProblem(index) {
+            if (confirm('Delete this problem?')) {
+                problems.splice(index, 1);
+                renderProblems();
+                showToast('Problem deleted', 'success');
+            }
+        }
+
+        function saveProblemEdit(e) {
+            e.preventDefault();
+
+            if (editingIndex === -1) return;
+
+            problems[editingIndex] = {
+                ...problems[editingIndex],
+                description: document.getElementById('editDescription').value.trim(),
+                equipment: document.getElementById('editEquipment').value,
+                priority: document.getElementById('editPriority').value,
+                resolution: document.getElementById('editResolution').value.trim()
+            };
+
+            renderProblems();
+            closeModal();
+            showToast('Problem updated', 'success');
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('show');
+            editingIndex = -1;
+        }
+
+        function clearAll() {
+            if (confirm('Clear all data? This cannot be undone.')) {
+                problems = [];
+                document.getElementById('serviceInfoForm').reset();
+                setDefaultDate();
+                renderProblems();
+                clearQuickForm();
+                showToast('All data cleared', 'success');
+            }
+        }
+
+        function exportReport() {
+            const serviceInfo = getServiceInfo();
+            if (!validateServiceInfo(serviceInfo)) return;
+
+            const reportData = {
+                serviceInfo,
+                problems,
+                exportTime: new Date().toISOString()
+            };
+
+            // Create comprehensive CSV
+            const csvContent = generateCSV(reportData);
+            downloadFile(csvContent, 'csv', getFileName('csv'));
+
+            // Also create a text summary
+            const textSummary = generateTextSummary(reportData);
+            downloadFile(textSummary, 'txt', getFileName('txt'));
+
+            showToast(`Report exported with ${problems.length} problems`, 'success');
+        }
+
+        function getServiceInfo() {
+            const form = document.getElementById('serviceInfoForm');
+            const formData = new FormData(form);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            return data;
+        }
+
+        function validateServiceInfo(info) {
+            const required = ['techName', 'serviceDate', 'facility', 'roomNumber'];
+            const missing = required.filter(field => !info[field]);
+            
+            if (missing.length > 0) {
+                showToast(`Missing: ${missing.join(', ')}`, 'error');
+                return false;
+            }
+            return true;
+        }
+
+        function generateCSV(data) {
+            const headers = [
+                'Timestamp', 'Technician', 'Date', 'Ticket', 'Facility', 'Room', 'Contact',
+                'Problem #', 'Priority', 'Equipment', 'Description', 'Resolution', 'Added Time'
+            ];
+
+            let rows = [];
+            
+            if (data.problems.length === 0) {
+                // If no problems, create one row with service info
+                rows.push([
+                    data.exportTime,
+                    data.serviceInfo.techName || '',
+                    data.serviceInfo.serviceDate || '',
+                    data.serviceInfo.ticketNumber || '',
+                    data.serviceInfo.facility || '',
+                    data.serviceInfo.roomNumber || '',
+                    data.serviceInfo.contactPerson || '',
+                    '',
+                    '',
+                    '',
+                    'No problems documented',
+                    '',
+                    ''
+                ]);
+            } else {
+                // Create a row for each problem
+                data.problems.forEach((problem, index) => {
+                    rows.push([
+                        data.exportTime,
+                        data.serviceInfo.techName || '',
+                        data.serviceInfo.serviceDate || '',
+                        data.serviceInfo.ticketNumber || '',
+                        data.serviceInfo.facility || '',
+                        data.serviceInfo.roomNumber || '',
+                        data.serviceInfo.contactPerson || '',
+                        index + 1,
+                        problem.priority,
+                        problem.equipment || '',
+                        problem.description,
+                        problem.resolution || '',
+                        problem.timestamp
+                    ]);
+                });
+            }
+
+            // Convert to CSV
+            const csvRows = [headers.join(',')];
+            rows.forEach(row => {
+                const csvRow = row.map(cell => {
+                    const str = String(cell).replace(/\r?\n/g, ' ');
+                    return str.includes(',') || str.includes('"') || str.includes('\n') 
+                        ? `"${str.replace(/"/g, '""')}"` : str;
+                });
+                csvRows.push(csvRow.join(','));
+            });
+
+            return '\uFEFF' + csvRows.join('\n');
+        }
+
+        function generateTextSummary(data) {
+            const info = data.serviceInfo;
+            let summary = `AV SERVICE REPORT
+${'='.repeat(50)}
+
+SERVICE DETAILS:
+Technician: ${info.techName || 'N/A'}
+Date: ${info.serviceDate || 'N/A'}
+Facility: ${info.facility || 'N/A'}
+Room: ${info.roomNumber || 'N/A'}
+Ticket #: ${info.ticketNumber || 'N/A'}
+Contact: ${info.contactPerson || 'N/A'}
+
+PROBLEMS FOUND: ${data.problems.length}
+${'='.repeat(50)}
+
+`;
+
+            if (data.problems.length === 0) {
+                summary += 'No problems were documented during this service call.\n';
+            } else {
+                data.problems.forEach((problem, index) => {
+                    summary += `${index + 1}. [${problem.priority.toUpperCase()}] ${problem.equipment ? `(${problem.equipment}) ` : ''}
+   ${problem.description}
+   ${problem.resolution ? `   ✅ RESOLVED: ${problem.resolution}` : '   ⏳ PENDING RESOLUTION'}
+   Added: ${problem.timestamp}
+
+`;
+                });
+            }
+
+            summary += `\nReport generated: ${new Date(data.exportTime).toLocaleString()}`;
+            return summary;
+        }
+
+        function getFileName(ext) {
+            const info = getServiceInfo();
+            const date = new Date().toISOString().slice(0, 10);
+            const facility = (info.facility || 'Unknown').replace(/[^a-zA-Z0-9]/g, '_');
+            const room = (info.roomNumber || 'Unknown').replace(/[^a-zA-Z0-9]/g, '_');
+            return `AV_Report_${facility}_${room}_${date}.${ext}`;
+        }
+
+        function downloadFile(content, type, filename) {
+            const mimeTypes = {
+                'csv': 'text/csv;charset=utf-8;',
+                'txt': 'text/plain;charset=utf-8;'
+            };
+
+            const blob = new Blob([content], { type: mimeTypes[type] });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function showToast(message, type) {
+            const toast = document.getElementById('statusToast');
+            toast.textContent = message;
+            toast.className = `status-toast ${type} show`;
+            
             setTimeout(() => {
-                const ctx = document.getElementById('modalChart').getContext('2d');
-                const data = flavorLabels.map(label => entry[label]);
-                
-                new Chart(ctx, {
-                    type: 'radar',
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Global functions for onclick handlers
+        window.editProblem = editProblem;
+        window.deleteProblem = deleteProblem;
+    </script>
+</body>
+</html>
